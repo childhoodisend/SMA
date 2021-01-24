@@ -1,1 +1,1 @@
-# SMA
+# Simple moving average
