@@ -1,7 +1,12 @@
-/*
+/* Задача:
  * Реализовать функцию, реализующую алгоритм простого скользящего среднего
 */
 
+/*
+ * При работе с тестовыми данными -- закоментировать Work Section и раскоментировать Test Section.
+ * Для генерации рандомных данных для каждого объекта -- ноборот,
+ * закоментировать Test Section и раскоментировать  Work Section.
+ */
 #include <iostream>
 
 #include <cstdlib>
@@ -33,19 +38,20 @@ public:
         window = _window;
         min_price = _min_price;
         max_price = _max_price;
-
+        cout << "window -> " << window << endl;
         /*---Test section---*/
-        fin_test.open("test.txt");
-        for (size_t i = 0; i < _window; ++i) {
-            price_type cur;
-            fin_test >> cur;
-            prices.push_back(cur);
-        }
+//        fin_test.open("test.txt");
+//        for (size_t i = 0; i < _window; ++i) {
+//            price_type cur;
+//            fin_test >> cur;
+//            prices.push_back(cur);
+//        }
         /*~~~Test section~~~*/
 
-
-//      for(size_t i = 0; i < _window; ++i)
-//          prices.push_back(TRand<price_type>(min_price, max_price));
+        /*---work section---*/
+        for(size_t i = 0; i < _window; ++i)
+          prices.push_back(TRand<price_type>(min_price, max_price));
+        /*~~~work section~~~*/
 
         for (size_t i = 0; i < window; ++i)
             sum += prices[i];
@@ -60,7 +66,7 @@ public:
     void save_results_to_file(int clocks, double sec);
 
 private:
-    deque<price_type> prices = {};          // цены(значения) исходной функции за установленный период window, храним их c условием FIFO
+    deque<price_type> prices = {};          // значения исходной функции за установленный период window, храним их c условием FIFO
     vector<price_type> _p = {};             // храним значения sum/window на каждой итерации
     price_type min_price = 0, max_price = 0;// диапазон, в котором генерируем цены
     sum_type sum = 0;                       // храним сумму prices[i] + ... + prices[i + n - 1]
@@ -83,12 +89,14 @@ void SMA<price_type, sum_type>::calculate_sma() {
         prices.pop_front();
 
         /*---Test section---*/
-        price_type cur;
-        fin_test >> cur;
-        prices.push_back(cur);
+//        price_type cur;
+//        fin_test >> cur;
+//        prices.push_back(cur);
         /*~~~Test section~~~*/
 
-        //prices.push_back(TRand<price_type >(min_price, max_price));
+        /*---work section---*/
+        prices.push_back(TRand<price_type >(min_price, max_price));
+        /*~~~work section~~~*/
 
         sum -= last_price;
         sum += prices.back();
@@ -122,102 +130,14 @@ int main() {
     srand(time(NULL));
     //test::test<double>(0.01,29.99); // сгенерировать новые данные для теста
 
-    cout << "window -> 4\n";
     SMA<float, float> sma(4, 0.01, 30.99);
+
     clock_t start = clock();
     sma.calculate_sma();
     clock_t end = clock() - start;
     sma.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma.save_prices_to_file();
 
-    cout << "window -> 8\n";
-    SMA<float, float> sma1(8, 0.01, 30.99);
-    start = clock();
-    sma1.calculate_sma();
-    end = clock() - start;
-    sma1.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma1.save_prices_to_file();
-
-    cout << "window -> 16\n";
-    SMA<float, float> sma2(16, 0.01, 30.99);
-    start = clock();
-    sma2.calculate_sma();
-    end = clock() - start;
-    sma2.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma2.save_prices_to_file();
-
-    cout << "window -> 32\n";
-    SMA<float, float> sma3(32, 0.01, 30.99);
-    start = clock();
-    sma3.calculate_sma();
-    end = clock() - start;
-    sma3.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma3.save_prices_to_file();
-
-    cout << "window -> 64\n";
-    SMA<float, float> sma4(64, 0.01, 30.99);
-    start = clock();
-    sma4.calculate_sma();
-    end = clock() - start;
-    sma4.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma4.save_prices_to_file();
-
-    cout << "window -> 128\n";
-    SMA<float, float> sma5(128, 0.01, 30.99);
-    start = clock();
-    sma5.calculate_sma();
-    end = clock() - start;
-    sma5.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma5.save_prices_to_file();
-
-    cout << "window -> 4\n";
-    SMA<double, double> sma6(4, 0.01, 30.99);
-    start = clock();
-    sma6.calculate_sma();
-    end = clock() - start;
-    sma6.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma6.save_prices_to_file();
-
-    cout << "window -> 8\n";
-    SMA<double, double> sma7(8, 0.01, 30.99);
-    start = clock();
-    sma7.calculate_sma();
-    end = clock() - start;
-    sma7.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma7.save_prices_to_file();
-
-    cout << "window -> 16\n";
-    SMA<double, double> sma8(16, 0.01, 30.99);
-    start = clock();
-    sma8.calculate_sma();
-    end = clock() - start;
-    sma8.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma8.save_prices_to_file();
-
-    cout << "window -> 32\n";
-    SMA<double, double> sma9(32, 0.01, 30.99);
-    start = clock();
-    sma9.calculate_sma();
-    end = clock() - start;
-    sma9.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma9.save_prices_to_file();
-
-    cout << "window -> 64\n";
-    SMA<double, double> sma10(64, 0.01, 30.99);
-    start = clock();
-    sma10.calculate_sma();
-    end = clock() - start;
-    sma10.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma10.save_prices_to_file();
-
-    cout << "window -> 128\n";
-    SMA<double, double> sma11(128, 0.01, 30.99);
-    start = clock();
-    sma11.calculate_sma();
-    end = clock() - start;
-    sma11.save_results_to_file(end, (double) end / CLOCKS_PER_SEC);
-    sma11.save_prices_to_file();
-
+    //sma.save_prices_to_file();
 
     return 0;
 }
