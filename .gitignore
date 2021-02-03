@@ -33,4 +33,6 @@
 
 # Custom
 cmake-build-debug
+cmake-build-release-mingw
 .idea
+.gitignore
